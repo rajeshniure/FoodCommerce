@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ProductCard from './Components/ProductCard';
 import products from './data/products'; 
 import CartCard from './Components/CartCard';
+import OrderConfirmedCard from './Components/OrderConfirmedCard';
 
 type CartItem = {
   name: string;
@@ -11,6 +12,18 @@ type CartItem = {
 
 function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
+
+const handleConfirmOrder = () => {
+  setIsOrderConfirmed(true);
+};
+
+const handleStartNewOrder = () => {
+  setCartItems([]);
+  setIsOrderConfirmed(false);
+};
+
+  
 
   const addToCart = (product: 
     { name: string; 
@@ -57,11 +70,6 @@ function App() {
     });
   };
 
-  const handleConfirmOrder = () => {
-    // Handle order confirmation here
-    alert('Order confirmed! Thank you for your purchase.');
-    setCartItems([]); // Clear cart after order
-  };
 
   return (
     <div className="min-h-screen bg-rose-50 p-8">
@@ -108,6 +116,16 @@ function App() {
             onUpdateQuantity={updateQuantity}
             onConfirmOrder={handleConfirmOrder}
           />
+
+              {isOrderConfirmed && (
+                <OrderConfirmedCard
+                  items={cartItems.map(item => ({
+                    ...item,
+                    image: products.find(p => p.name === item.name)?.image.desktop || ''
+                  }))}
+                  onStartNewOrder={handleStartNewOrder}
+              />
+            )}
         </div>
       </div>
     </div>

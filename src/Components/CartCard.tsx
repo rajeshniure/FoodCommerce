@@ -1,3 +1,4 @@
+
 type CartCardProps = {
   count?: number;
   items?: Array<{
@@ -22,6 +23,7 @@ const CartCard = ({
   };
 
   return (
+    <>
     <div className="w-80 bg-white rounded-xl overflow-hidden">
       <div className="p-3">
         <h2 className="text-lg font-bold text-orange-400">
@@ -113,7 +115,10 @@ const CartCard = ({
           </div>
         </div>
       )}
+
     </div>
+          </>
+    
   );
 };
 
