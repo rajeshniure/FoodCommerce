@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 
 type OrderConfirmedProps = {
-  items: Array<{
+  items: {
     name: string
     price: number
     quantity: number
     image: string
-  }>
+  }[]
   onStartNewOrder: () => void
 }
 
@@ -27,7 +27,7 @@ const OrderConfirmedCard = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl w-110 p-6 shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all">
         <div className=" mb-4">
           <img

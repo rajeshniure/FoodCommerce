@@ -1,10 +1,10 @@
 type CartCardProps = {
   count?: number
-  items?: Array<{
+  items?: {
     name: string
     price: number
     quantity: number
-  }>
+  }[]
   onRemoveItem?: (index: number) => void
   onConfirmOrder?: () => void
 }
