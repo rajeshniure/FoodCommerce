@@ -1,75 +1,74 @@
-import { useState } from 'react';
-import ProductCard from './Components/ProductCard';
-import products from './data/products'; 
-import CartCard from './Components/CartCard';
-import OrderConfirmedCard from './Components/OrderConfirmedCard';
+import { useState } from 'react'
+import ProductCard from './Components/ProductCard'
+import products from './data/products'
+import CartCard from './Components/CartCard'
+import OrderConfirmedCard from './Components/OrderConfirmedCard'
 
 type CartItem = {
-  name: string;
-  price: number;
-  quantity: number;
-};
+  name: string
+  price: number
+  quantity: number
+}
 
 function App() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
+  const [cartItems, setCartItems] = useState<CartItem[]>([])
+  const [isOrderConfirmed, setIsOrderConfirmed] = useState(false)
 
-const handleConfirmOrder = () => {
-  setIsOrderConfirmed(true);
-};
+  const handleConfirmOrder = () => {
+    setIsOrderConfirmed(true)
+  }
 
-const handleStartNewOrder = () => {
-  setCartItems([]);
-  setIsOrderConfirmed(false);
-};
+  const handleStartNewOrder = () => {
+    setCartItems([])
+    setIsOrderConfirmed(false)
+  }
 
-  
-
-  const addToCart = (product: 
-    { name: string; 
-      price: number 
-    }) => {
+  const addToCart = (product: { name: string; price: number }) => {
     setCartItems(prevItems => {
-      const existingItemIndex = prevItems.findIndex(item => item.name === product.name);
-      
+      const existingItemIndex = prevItems.findIndex(
+        item => item.name === product.name
+      )
+
       if (existingItemIndex >= 0) {
         // If item exists, increment quantity
-        const newItems = [...prevItems];
-        const existingItem = newItems[existingItemIndex];
+        const newItems = [...prevItems]
+        const existingItem = newItems[existingItemIndex]
         if (existingItem) {
           newItems[existingItemIndex] = {
             ...existingItem,
-            quantity: existingItem.quantity + 1
-          };
+            quantity: existingItem.quantity + 1,
+          }
         }
-        return newItems;
+        return newItems
       } else {
         // If item doesn't exist, add new item
-        return [...prevItems, { name: product.name, price: product.price, quantity: 1 }];
+        return [
+          ...prevItems,
+          { name: product.name, price: product.price, quantity: 1 },
+        ]
       }
-    });
-  };
+    })
+  }
 
   const removeFromCart = (index: number) => {
-    setCartItems(prevItems => prevItems.filter((_, i) => i !== index));
-  };
+    setCartItems(prevItems => prevItems.filter((_, i) => i !== index))
+  }
 
   const updateQuantity = (index: number, newQuantity: number) => {
-    if (newQuantity < 0) return;
+    if (newQuantity < 0) return
     setCartItems(prevItems => {
-      const newItems = [...prevItems];
+      const newItems = [...prevItems]
       if (newQuantity === 0) {
         // Remove item when quantity becomes zero
-        return prevItems.filter((_, i) => i !== index);
+        return prevItems.filter((_, i) => i !== index)
       }
-      const item = newItems[index];
+      const item = newItems[index]
       if (item) {
-        newItems[index] = { ...item, quantity: newQuantity };
+        newItems[index] = { ...item, quantity: newQuantity }
       }
-      return newItems;
-    });
-  };
-
+      return newItems
+    })
+  }
 
   return (
     <div className="min-h-screen bg-rose-50 p-8">
@@ -85,23 +84,32 @@ const handleStartNewOrder = () => {
                   image: product.image.desktop,
                   name: product.name,
                   description: product.category,
-                  price: product.price
+                  price: product.price,
                 }}
                 quantity={
-                  cartItems.find(item => item.name === product.name)?.quantity || 0
+                  cartItems.find(item => item.name === product.name)
+                    ?.quantity || 0
                 }
-                onAddToCart={() => addToCart({
-                  name: product.name,
-                  price: product.price
-                })}
-                onIncrement={() => updateQuantity(
-                 cartItems.findIndex(item => item.name === product.name),
-                 (cartItems.find(item => item.name === product.name)?.quantity || 0) + 1
-                )}
-                onDecrement={() => updateQuantity(
-                  cartItems.findIndex(item => item.name === product.name),
-                  (cartItems.find(item => item.name === product.name)?.quantity || 0) - 1
-                )}
+                onAddToCart={() =>
+                  addToCart({
+                    name: product.name,
+                    price: product.price,
+                  })
+                }
+                onIncrement={() =>
+                  updateQuantity(
+                    cartItems.findIndex(item => item.name === product.name),
+                    (cartItems.find(item => item.name === product.name)
+                      ?.quantity || 0) + 1
+                  )
+                }
+                onDecrement={() =>
+                  updateQuantity(
+                    cartItems.findIndex(item => item.name === product.name),
+                    (cartItems.find(item => item.name === product.name)
+                      ?.quantity || 0) - 1
+                  )
+                }
               />
             ))}
           </div>
@@ -113,23 +121,23 @@ const handleStartNewOrder = () => {
             count={cartItems.reduce((total, item) => total + item.quantity, 0)}
             items={cartItems}
             onRemoveItem={removeFromCart}
-            onUpdateQuantity={updateQuantity}
             onConfirmOrder={handleConfirmOrder}
           />
 
-              {isOrderConfirmed && (
-                <OrderConfirmedCard
-                  items={cartItems.map(item => ({
-                    ...item,
-                    image: products.find(p => p.name === item.name)?.image.desktop || ''
-                  }))}
-                  onStartNewOrder={handleStartNewOrder}
-              />
-            )}
+          {isOrderConfirmed && (
+            <OrderConfirmedCard
+              items={cartItems.map(item => ({
+                ...item,
+                image:
+                  products.find(p => p.name === item.name)?.image.desktop || '',
+              }))}
+              onStartNewOrder={handleStartNewOrder}
+            />
+          )}
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
